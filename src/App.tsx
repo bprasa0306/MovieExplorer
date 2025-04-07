@@ -8,7 +8,7 @@ import GenreFilter from "./components/GenreFilter Component";
 import RatingFilter from "./components/RatingFilter Component";
 import SortDropdown from "./components/sortDropdown Component";
 import SearchBar from "./components/SearchBar Component";
-import "./Styles.css";
+import Styles from "../src/Styles.css";
 
 import {useDispatch, useSelector} from "react-redux";
 import {fetchMovies} from "./redux/movieSlice";
@@ -26,7 +26,7 @@ const App: React.FC = ()=> {
   const[sortOption, setSortOption] = useState<string>("");
 
   useEffect(() => {
-    dispatch(fetchMovies());
+    dispatch(fetchMovies(query));
 
   }, [dispatch]);
 
