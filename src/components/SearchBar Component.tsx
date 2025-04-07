@@ -9,13 +9,13 @@ const SearchBar: React.FC = () => {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        dispatch(fetchMovies());
+        dispatch(fetchMovies(query));
     };
     return(
         <div>
             <form onSubmit = {handleSearch} className="search-bar">
             <input type="text"
-            placeholder="search movies"
+            placeholder="search movies.."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             

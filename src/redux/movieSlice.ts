@@ -16,10 +16,12 @@ interface MovieState {
     status: "idle"| "loading" | "failed";
 }
 
-export const fetchMovies = createAsyncThunk<Movie[], void>("movies/fetchMovies", async() => {
-    const response = await axios.get(API_URL);
-    return response.data.result;
-});
+export const fetchMovies = createAsyncThunk<Movie[], string>("movies/fetchMovies", async(query = "") => {
+    const response = await axios.get(
+        query 
+        ? `https://api.themoviedb.org/3/movie/serach?api_key=${API_KEY}&query = ${query}` : API_URL);
+    return response.data.results;
+}); 
 
 
 const initialState: MovieState = {

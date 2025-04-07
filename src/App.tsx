@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 //import Greeting from "./components/Greeting";
 //import Counter from "./components/counter";
 import MovieCard from "./components/MovieCard";
@@ -20,10 +20,34 @@ const App: React.FC = ()=> {
 
   const dispatch = useDispatch<AppDispatch>();
   const {movies, status} = useSelector((state: RootState) => state.movies);
+
+  const[ratingFilter, setRatingFilter] = useState<string>("");
+  const[genreFilter, setGenreFilter] = useState<string[]>([]);
+  const[sortOption, setSortOption] = useState<string>("");
+
   useEffect(() => {
     dispatch(fetchMovies());
 
   }, [dispatch]);
+
+  const filteredMovies = movies.filter((movie) => {
+    if(ratingFilter && !movie.description.toLowerCase().includes(ratingFilter.toLowerCase())) {
+    return false;
+    }
+    if(genreFilter.length > 0 && !genreFilter.some((genre) => movie.description.toLowerCase().includes(genre.toLowerCase()))) {
+      return false;
+    } return true;
+  })
+
+  .sort((a, b) => {
+    if(sortOption === "Popularity") {
+      return b.id - a.id;
+    }
+    if(sortOption === "Release-year") {
+      return b.id - a.id;
+    }
+    return 0;
+  });
   
   return(
   <div className="container">
@@ -32,9 +56,9 @@ const App: React.FC = ()=> {
 
     <div className="filters">
       <SearchBar />
-      <SortDropdown />
-      <RatingFilter />
-      <GenreFilter />
+      <SortDropdown sortOption={sortOption} setSortOption={setSortOption}/>
+      <RatingFilter rating={ratingFilter} setRatingFilter={setRatingFilter}/>
+      <GenreFilter selectedGenres={genreFilter} setGenreFilter={setGenreFilter}/>
     </div>
 
     <MovieTrailer/>
@@ -44,12 +68,7 @@ const App: React.FC = ()=> {
     ) : (
 
     <div className="movie-grid">
-      {movies.map((movie: {
-        id: number;
-        title: string;
-        image: string;
-        description: string;
-      }) => (
+      {filteredMovies.map((movie) => (
     <MovieCard
     key = {movie.id}
     title= {movie.title}
