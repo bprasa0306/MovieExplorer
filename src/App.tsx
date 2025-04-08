@@ -26,7 +26,7 @@ const App: React.FC = ()=> {
   const[sortOption, setSortOption] = useState<string>("");
 
   useEffect(() => {
-    dispatch(fetchMovies());
+    dispatch(fetchMovies(""));
 
   }, [dispatch]);
 
